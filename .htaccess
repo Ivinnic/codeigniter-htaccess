@@ -1,0 +1,51 @@
+AddDefaultCharset UTF-8
+ 
+Options +FollowSymLinks
+Options -Indexes
+ 
+<IfModule !mod_rewrite.c>
+    ErrorDocument 404 /index.php
+</IfModule>
+ 
+# Увеличиваем объем загрузки файла
+#php_value upload_max_filesize 100M
+#php_value post_max_size 100M
+#php_value max_execution_time 200
+#php_value max_input_time 200
+ 
+# Склеивание Домена с WWW
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{HTTP_HOST} ^bla bla bla.ru
+    RewriteRule (.*) http://www.bla bla bla.ru/$1 [R=301,L]    
+</IfModule>
+ 
+# Удаляем index.php в URL
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteRule ^index\.php/(.+)$ http://www.bla bla bla.ru/$1 [R=301,L]
+</IfModule>
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
+    RewriteRule ^index\.php$ http://www.bla bla bla.ru/ [R=301,L]
+</IfModule>
+ 
+# Удаляем слеш в конце URL
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{HTTP_HOST} (.*)
+    RewriteCond %{REQUEST_URI} /$ [NC]
+    RewriteRule ^(.*)(/)$ $1 [L,R=301]
+</IfModule>
+ 
+# Для работы Codeineger
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteBase /
+    RewriteCond $1 !^(index\.php|user_dok|css\.xml|robots\.txt)
+    RewriteCond %{REQUEST_URI} !\.(css¦js¦jpg¦gif¦png)$
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
+</IfModule>
